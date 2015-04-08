@@ -1,0 +1,2 @@
+pdf2txt.py -t text -o 2900510720726.txt ../samples/2900510720726.pdf
+pdf2txt.py -t tag -o 2900510720726.txt ../samples/2900510720726.pdf
