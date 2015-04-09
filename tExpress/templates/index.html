@@ -9,18 +9,26 @@
     <form action="" method=post enctype=multipart/form-data>
         <p><input type=file name=file>
             <input type=submit value=Upload>
-        <table class="tsel" border="0">
-            <tbody><td colspan="2" align="center">
-                <div id="outdiv"><div id="qrfile">
-                <canvas id="out-canvas" width="320" height="240"></canvas>
-                <div id="imghelp">drag and drop a QRCode here<br>or select a file<input type="file" onchange="handleFiles(this.files)"></div></div></div></td></tr>
-            </tbody></table>
     </form>
     <br>
         {% for error in errors %}
         <h4>{{ error }}</h4>
         {% endfor %}
     <br>
-    <p><br><b>{{ results }}</b></p>
+    <div class="col-sm-5 col-sm-offset-1">
+        {% if results %}
+        <h2>ticket information</h2>
+        <div id="results">
+            <table class="table table-striped">
+                {% for result in results.items()%}
+                <tr>
+                    <td>{{ result[0]+':' }}</td>
+                    <td>{{ result[1][0].decode('utf-8') }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+    </div>
 </body>
 </html>

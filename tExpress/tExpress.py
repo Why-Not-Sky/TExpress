@@ -12,8 +12,8 @@ QR_CODE = '290051072072605887138000022201220150313165400002201503131830000100000
 WEBQR='../data/webqr.txt'
 ZXING='../data/zxing.org.txt'
 
-def download_ticket_pdf(pnr, tid, fname):
-    url = (THSRC + "&pnr=%s&tid=%s") % (pnr, tid)
+def download_ticket_pdf(ord_no, tid, fname):
+    url = (THSRC + "&pnr=%s&tid=%s") % (ord_no, tid)
     response = urlopen(url)
     data = response.read()
 
@@ -26,8 +26,8 @@ def upload_ticket_image():
 
 def get_ticket_id(imgfile):
     tcode = decode_qrcode(imgfile)
-    pnr, tid = (tcode[13:21], tcode[0:13])
-    return ((pnr, tid))
+    ord_no, tid = (tcode[13:21], tcode[0:13])
+    return ((ord_no, tid))
 
 def decode_qrcode(imgfile):
     return (decode_qrcode_byWeb(imgfile))
@@ -64,9 +64,13 @@ def exec_pdf2txt(pdf_file):
     return(txt_file)
 
 def get_ticket_info(imgfile):
-    pnr, tid = get_ticket_id(imgfile)
+    import collections
+
+    result = collections.defaultdict(list)
+
+    ord_no, tid = get_ticket_id(imgfile)
     out_file = './' + tid + '.pdf'
-    download_ticket_pdf(pnr, tid, out_file)
+    download_ticket_pdf(ord_no, tid, out_file)
     out_txt_file = exec_pdf2txt(out_file)
     tdate, trip = parse_ticket (out_txt_file) #translate to unicode
     #utrip = trip.encode('utf-8')
@@ -74,7 +78,15 @@ def get_ticket_info(imgfile):
     utrip = trip.decode('utf-8')
     #udate = tdate.encode('utf-8')  #unicode(tdate)
     udate = unicode(tdate)
-    return pnr, tid, udate, utrip
+
+    #result = collections.defaultdict(list)
+    result['order no'].append(ord_no)
+    result['ticket id'].append(tid)
+    result['date'].append(tdate)
+    result['journey'].append(trip)
+
+    return result
+    #return ord_no, tid, udate, utrip
 
 def parse_ticket_file(txt_file):
     data = load_file(txt_file)
@@ -111,8 +123,8 @@ def parse_ticket(txt_file):
 
 if __name__ == '__main__':
     # 05887138 2900510720726 2015-03-13 左營 16:54 - 台北 18:30
-    pnr, tid, tdate, trip = get_ticket_info(IMG_FILE)
-    print pnr, tid, tdate, trip
+    ord_no, tid, tdate, trip = get_ticket_info(IMG_FILE)
+    print ord_no, tid, tdate, trip
 
 
 

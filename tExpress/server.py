@@ -23,6 +23,7 @@ def allowed_file(filename):
 def index():
     # ps -fA | grep python
     errors = []
+    results={}
     if request.method == 'POST':
         try:
             file = request.files['file']
@@ -30,9 +31,10 @@ def index():
                 filename = secure_filename(file.filename)
                 filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(filename)
-                pnr, tid, tdate, trip = tExpress.get_ticket_info(filename)
+                #pnr, tid, tdate, trip = tExpress.get_ticket_info(filename)
+                results = tExpress.get_ticket_info(filename)
                 #pnr, tid, tdate, trip = u'05887138', u'2900510720726', u'2015-03-13', u'左營 16:54 - 台北 18:30'
-                results = u'order:%s ticket id:%s date:%s trip:%s' % (pnr, tid, tdate, trip)
+                #results = u'order:%s ticket id:%s date:%s trip:%s' % (pnr, tid, tdate, trip)
                 #results = ticket_info
                 # return redirect(url_for('index'))
         except:
@@ -40,7 +42,7 @@ def index():
                 "Unable to get the ticket information. Please make sure it's valid and try again."
                 )
 
-    else: results=u'' #ticket_info = u''
+    else: results={} #ticket_info = u''
 
     return render_template('index.html', errors=errors, results=results)
 
