@@ -7,12 +7,12 @@ from bs4 import BeautifulSoup
 import zxcode
 
 THSRC = 'http://www4.thsrc.com.tw/tc/TExp/page_print.asp?lang=tc'
-OUTPUT_PATH = '../data/'
-IMG_FILE = '../data/ticket.png'
+OUTPUT_PATH = './data/'
+IMG_FILE = OUTPUT_PATH + 'ticket.png'
 TXT_FILE = OUTPUT_PATH + '2900510720726.txt'
 QR_CODE = '290051072072605887138000022201220150313165400002201503131830000100000010000002018001000000163000600100000000002015031310A89C'
-WEBQR='../data/webqr.txt'
-ZXING='../data/zxing.org.txt'
+WEBQR = OUTPUT_PATH + 'webqr.txt'
+ZXING = OUTPUT_PATH + 'zxing.org.txt'
 
 def download_ticket_pdf(ord_no, tid, fname):
     url = (THSRC + "&pnr=%s&tid=%s") % (ord_no, tid)
@@ -68,21 +68,24 @@ def exec_pdf2txt(pdf_file):
 def get_ticket_info(imgfile):
     import collections
 
-    result = collections.defaultdict(list)
+    #return (parse_ticket_by_find(TXT_FILE))
 
     ord_no, tid = get_ticket_id(imgfile)
     out_file = OUTPUT_PATH + tid + '.pdf'
     download_ticket_pdf(ord_no, tid, out_file)
     out_txt_file = exec_pdf2txt(out_file)
 
-    return (parse_ticket_by_find(out_txt_file))
+    return (out_file, parse_ticket_by_find(out_txt_file))
+
+    #not used
     #tdate, trip = parse_ticket (out_txt_file) #translate to unicode
     #utrip = trip.encode('utf-8')
-    #utrip = unicode(trip)
-    utrip = trip.decode('utf-8')
+    utrip = unicode(trip)
+    #utrip = trip.decode('utf-8')
     #udate = tdate.encode('utf-8')  #unicode(tdate)
     udate = unicode(tdate)
 
+    result = collections.defaultdict(list)
     result['order no'].append(ord_no)
     result['ticket id'].append(tid)
     result['date'].append(tdate)
@@ -144,8 +147,9 @@ def parse_ticket_by_regular_expression(txt_file):
 
 if __name__ == '__main__':
     # 05887138 2900510720726 2015-03-13 左營 16:54 - 台北 18:30
-    tinfo = get_ticket_info(IMG_FILE)
+    pdf_file, tinfo = get_ticket_info(IMG_FILE)
     #tinfo = parse_ticket_by_find(TXT_FILE)
+    print pdf_file
     for t in sorted(tinfo.items()): print (t[0] + ':' + t[1])
 
 

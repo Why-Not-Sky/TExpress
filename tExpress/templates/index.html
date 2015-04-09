@@ -19,11 +19,16 @@
         {% if results %}
         <h2>ticket information</h2>
         <div id="results">
+            <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap/bootstrap.min.css') }}">
             <table class="table table-striped">
-                {% for result in results.items()%}
+                <tr><a href={{link}} target="_blank"> download the pdf file
+                    <img src="./images/PDF.png" alt="HTML tutorial" style="width:32px;height:32px;border:0">
+                    </a>
+                </tr>
+                {% for result in results %}
                 <tr>
-                    <td>{{ result[0]+':' }}</td>
-                    <td>{{ result[1][0].decode('utf-8') }}</td>
+                    <td>{{ result[0].decode('utf-8')+':' }}</td>
+                    <td>{{ result[1].decode('utf-8')}}</td>
                 </tr>
                 {% endfor %}
             </table>
