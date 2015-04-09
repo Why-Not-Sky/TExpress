@@ -42,7 +42,7 @@ def index():
                 "Unable to get the ticket information. Please make sure it's valid and try again."
                 )
 
-    else: results={} #ticket_info = u''
+    #else: results={} #ticket_info = u''
 
     return render_template('index.html', errors=errors, results=results)
 

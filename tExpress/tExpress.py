@@ -7,7 +7,9 @@ from bs4 import BeautifulSoup
 import zxcode
 
 THSRC = 'http://www4.thsrc.com.tw/tc/TExp/page_print.asp?lang=tc'
+OUTPUT_PATH = '../data/'
 IMG_FILE = '../data/ticket.png'
+TXT_FILE = OUTPUT_PATH + '2900510720726.txt'
 QR_CODE = '290051072072605887138000022201220150313165400002201503131830000100000010000002018001000000163000600100000000002015031310A89C'
 WEBQR='../data/webqr.txt'
 ZXING='../data/zxing.org.txt'
@@ -26,8 +28,8 @@ def upload_ticket_image():
 
 def get_ticket_id(imgfile):
     tcode = decode_qrcode(imgfile)
-    ord_no, tid = (tcode[13:21], tcode[0:13])
-    return ((ord_no, tid))
+    ord_no, tid = tcode[13:21], tcode[0:13]
+    return ord_no, tid
 
 def decode_qrcode(imgfile):
     return (decode_qrcode_byWeb(imgfile))
@@ -69,37 +71,56 @@ def get_ticket_info(imgfile):
     result = collections.defaultdict(list)
 
     ord_no, tid = get_ticket_id(imgfile)
-    out_file = './' + tid + '.pdf'
+    out_file = OUTPUT_PATH + tid + '.pdf'
     download_ticket_pdf(ord_no, tid, out_file)
     out_txt_file = exec_pdf2txt(out_file)
-    tdate, trip = parse_ticket (out_txt_file) #translate to unicode
+
+    return (parse_ticket_by_find(out_txt_file))
+    #tdate, trip = parse_ticket (out_txt_file) #translate to unicode
     #utrip = trip.encode('utf-8')
     #utrip = unicode(trip)
     utrip = trip.decode('utf-8')
     #udate = tdate.encode('utf-8')  #unicode(tdate)
     udate = unicode(tdate)
 
-    #result = collections.defaultdict(list)
     result['order no'].append(ord_no)
     result['ticket id'].append(tid)
     result['date'].append(tdate)
     result['journey'].append(trip)
 
-    return result
+    #return result
     #return ord_no, tid, udate, utrip
 
-def parse_ticket_file(txt_file):
+def parse_ticket_by_find(txt_file):
+    ticket_keys = ['1-乘車日期', '2-車次', '3-乘車區間', '4-票款', '5-訂位代號', '6-票號']
+    #ticket_dict = {'date', 'drive', 'journey', 'amount', 'order no', 'ticket id'}
+    # ['2015-03-13', '222', '\xe5\xb7\xa6\xe7\x87\x9f 16:54 - \xe5\x8f\xb0\xe5\x8c\x97 18:30', 'NT$ 1630']
+    ORDER_NO_KEYWORD = '訂位代號：'  #05887138
+    TICKET_ID_KEYWORD = '票號：票號：' #2900510720726
+
     data = load_file(txt_file)
+    iorder_no_begin = data.find(ORDER_NO_KEYWORD)+len(ORDER_NO_KEYWORD)
+    iorder_no_end = iorder_no_begin + 8
+    order_no = data[iorder_no_begin:iorder_no_end]
+
+    itid_begin = data.find(TICKET_ID_KEYWORD)+len(TICKET_ID_KEYWORD)
+    itid_end = itid_begin + 13
+    tid = data[itid_begin:itid_end]
+
     istart =  data.find('票款票款')
     iend =  data.find('注意事項：')
     tinfo = data[istart:iend]
 
     tf8 = filter(lambda x: x != '', tinfo.split('\n'))
-    tdate, tno, trip, tamount = tf8[1], tf8[2], tf8[3], tf8[4]
+    tf8.append(order_no); tf8.append(tid)
 
-    return tdate, tno, trip, tamount  #errors occur as tuple translation
+    ticket_dict = dict(zip(ticket_keys, tf8[1:]))
 
-def parse_ticket(txt_file):
+    return (ticket_dict)
+    #tdate, tno, trip, tamount = tf8[1], tf8[2], tf8[3], tf8[4]
+    #return tdate, tno, trip, tamount  #errors occur as tuple translation
+
+def parse_ticket_by_regular_expression(txt_file):
     tif = '乘車區間\n\n' + '票款票款\n\n' + '2015-03-13\n\n' + '222\n\n' \
           + '左營 16:54 - 台北 18:30\n\n' + 'NT$ 1630\n\n' \
           + '注意事項：'
@@ -123,8 +144,9 @@ def parse_ticket(txt_file):
 
 if __name__ == '__main__':
     # 05887138 2900510720726 2015-03-13 左營 16:54 - 台北 18:30
-    ord_no, tid, tdate, trip = get_ticket_info(IMG_FILE)
-    print ord_no, tid, tdate, trip
+    tinfo = get_ticket_info(IMG_FILE)
+    #tinfo = parse_ticket_by_find(TXT_FILE)
+    for t in sorted(tinfo.items()): print (t[0] + ':' + t[1])
 
 
 
