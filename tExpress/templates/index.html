@@ -1,27 +1,35 @@
-<!DOCTYPE html><content="text/html; charset=unicode" >
+<!DOCTYPE html>
 <html>
-<head lang="en">
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<head>
     <meta charset="UTF-8">
     <title>TExpress Expense Application</title>
     <h1>Please QRCode Image File of TExpress</h1>
 </head>
 <body>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap/fileinput.min.css') }}">
     <form action="" method=post enctype=multipart/form-data>
-        <p><input type=file name=file>
-            <input type=submit value=Upload>
+        <p>
+        <div class="col-sm-1">
+            <input id="file-id" type=file class="btn btn-info" name="file">
+            <input type=submit class="btn btn-primary" value=Upload>
+        </div>
+
     </form>
-    <br>
+    <br><div>
         {% for error in errors %}
         <h4>{{ error }}</h4>
-        {% endfor %}
+        {% endfor %}</div>
     <br>
-    <div class="col-sm-5 col-sm-offset-1">
+    <div class="">
         {% if results %}
         <h2>ticket information</h2>
-        <div id="results">
-            <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap/bootstrap.min.css') }}">
+            <div id="results" class="col-sm-4">
             <table class="table table-striped">
-                <tr><a href={{link}} target="_blank"> download the pdf file
+                <tr><a href={{link}} target="_blank" class="alert alert-info"> download the pdf file
                     <img src="./images/PDF.png" alt="HTML tutorial" style="width:32px;height:32px;border:0">
                     </a>
                 </tr>
@@ -32,7 +40,7 @@
                 </tr>
                 {% endfor %}
             </table>
-        </div>
+            </div>
         {% endif %}
     </div>
 </body>
