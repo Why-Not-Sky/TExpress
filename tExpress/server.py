@@ -15,7 +15,7 @@ STATIC_URL_PATH = '/Users/sky_wu/Dropbox/work/p1-program/myprojects/TExpress' #o
 
 #app = Flask(__name__)
 # set the project root directory as the static folder, you can set others.
-app = Flask(__name__, static_url_path=STATIC_URL_PATH) #'')
+app = Flask(__name__, static_url_path='') #STATIC_URL_PATH) #'')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -61,4 +61,4 @@ def index():
     return render_template('index.html', errors=errors, results=sorted(results.items()), link=pdf_link)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='127.0.0.1', port=5001, debug=True)
