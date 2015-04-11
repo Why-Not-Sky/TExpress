@@ -36,6 +36,7 @@ def index():
     # ps -fA | grep python
     errors = []
     results={}
+    #results={'3-\xe4\xb9\x98\xe8\xbb\x8a\xe5\x8d\x80\xe9\x96\x93': '\xe5\xb7\xa6\xe7\x87\x9f 00:54 - \xe5\x8f\xb0\xe5\x8c\x97 18:30', '6-\xe7\xa5\xa8\xe8\x99\x9f': '2900510720726', '5-\xe8\xa8\x82\xe4\xbd\x8d\xe4\xbb\xa3\xe8\x99\x9f': '05887138', '2-\xe8\xbb\x8a\xe6\xac\xa1': '222', '1-\xe4\xb9\x98\xe8\xbb\x8a\xe6\x97\xa5\xe6\x9c\x9f': '2015-03-13', '4-\xe7\xa5\xa8\xe6\xac\xbe': 'NT$ 1630'}
     pdf_link=''
     if request.method == 'POST':
         try:
@@ -44,19 +45,12 @@ def index():
                 filename = secure_filename(file.filename)
                 filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(filename)
-                #pnr, tid, tdate, trip = tExpress.get_ticket_info(filename)
                 pdf_file, results = tExpress.get_ticket_info(filename)
                 pdf_link = pdf_file
-                #pnr, tid, tdate, trip = u'05887138', u'2900510720726', u'2015-03-13', u'左營 16:54 - 台北 18:30'
-                #results = u'order:%s ticket id:%s date:%s trip:%s' % (pnr, tid, tdate, trip)
-                #results = ticket_info
-                # return redirect(url_for('index'))
         except:
             errors.append(
                 "Unable to get the ticket information. Please make sure it's valid and try again."
                 )
-
-    #else: results={} #ticket_info = u''
 
     return render_template('index.html', errors=errors, results=sorted(results.items()), link=pdf_link)
 

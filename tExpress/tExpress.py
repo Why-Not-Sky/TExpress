@@ -68,7 +68,8 @@ def exec_pdf2txt(pdf_file):
 def get_ticket_info(imgfile):
     import collections
 
-    #return (parse_ticket_by_find(TXT_FILE))
+    #for testing not to download again
+    #return (TXT_FILE, parse_ticket_by_find(TXT_FILE))
 
     ord_no, tid = get_ticket_id(imgfile)
     out_file = OUTPUT_PATH + tid + '.pdf'

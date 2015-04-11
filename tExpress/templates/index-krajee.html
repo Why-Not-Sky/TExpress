@@ -3,34 +3,37 @@
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://plugins.krajee.com/assets/c4d1c63b/js/fileinput.min.css" rel="stylesheet">
+<script src="http://www.google.com/jsapi"></script>
+<script src="http://plugins.krajee.com/assets/prod/all-krajee.js"></script>
+<script src="http://plugins.krajee.com/assets/c4d1c63b/js/fileinput.min.js"></script>
+
+<script src="{{url_for('static', filename='fileinput.js')}}"></script>
+<link  rel="stylesheet" type=text/css href="{{url_for('static', filename='fileinput.css')}}" >
+
 <head>
     <meta charset="UTF-8">
     <title>TExpress Expense Application</title>
-    <h2>Please QRCode of TExpress</h2>
+    <h2>Please upload QRCode Image of TExpress</h2>
 </head>
 <body>
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap/fileinput.min.css') }}">
-    <form action="" method=post enctype=multipart/form-data>
-        <p>
-        <div class="col-sm-1">
-            <input id="file-id" type=file class="btn btn-info" name="file">
-            <input type=submit class="btn btn-primary" value=Upload>
-        </div>
+    <div class="col-sm-8">
+        <input id="file-id" type="file" multiple="true" name="file">
+    </div>
 
-    </form>
     <br><div>
         {% for error in errors %}
         <h4>{{ error }}</h4>
         {% endfor %}</div>
     <br>
-    <div class="">
+<span>
+    <div class="col-sm-0">
         {% if results %}
         <h2>ticket information</h2>
             <div id="results" class="col-sm-4">
             <table class="table table-striped">
                 <tr><a href={{link}} target="_blank" class="alert alert-info"> download the pdf file
-                    <img src="{{url_for('static', filename='images/PDF.png') }}" alt="HTML tutorial" style="width:32px;height:32px;border:0">
+                    <img alt="HTML tutorial" style="width:32px;height:32px;border:0">
                     </a>
                 </tr>
                 {% for result in results %}
@@ -43,5 +46,7 @@
             </div>
         {% endif %}
     </div>
+</span>
+
 </body>
 </html>

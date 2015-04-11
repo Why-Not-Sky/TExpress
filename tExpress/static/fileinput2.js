@@ -12,11 +12,27 @@ type="text/javascript">jQuery(document).ready(function () {
 }
 (document, "script", "twitter-wjs");
 
+$("#file-id3").fileinput({
+	previewFileType: "image",
+	browseClass: "btn btn-success",
+	browseLabel: "Pick Image",
+	browseIcon: '<i class="glyphicon glyphicon-picture"></i>',
+	removeClass: "btn btn-danger",
+	removeLabel: "Delete",
+	removeIcon: '<i class="glyphicon glyphicon-trash"></i>',
+	uploadClass: "btn btn-info",
+	uploadLabel: "Upload",
+	uploadIcon: '<i class="glyphicon glyphicon-upload"></i>',
+    uploadUrl: "http://127.0.0.1:5001/",
+    uploadAsync: false,
+});
+
 $("#file-id").fileinput({
     browseClass: "btn btn-success",
     removeClass: "btn btn-danger",
     uploadClass: "btn btn-info",
     uploadUrl: "http://127.0.0.1:5001/",
+    uploadAsync: false,
     layoutTemplates: {
         main1:
         "<div class=\'input-group {class}\'>\n" +
@@ -26,7 +42,7 @@ $("#file-id").fileinput({
         "       {remove}\n" +
         "   </div>\n" +
         "   {caption}\n" +
-        "</div>\n" +  "{preview}",
+        "</div>\n" +  "{preview}"
     }
 });
 
@@ -47,5 +63,3 @@ setTimeout(function() {
     $('.kv-webtips').removeClass('kv-animated-bell').addClass('kv-animated-bell');
 }, 3000);
 });
-
-
