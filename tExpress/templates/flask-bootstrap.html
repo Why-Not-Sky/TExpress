@@ -1,0 +1,32 @@
+{% extends "bootstrap/base.html" %}
+
+{% block html %}
+
+{% block title %}TExpress Expense Application{% endblock %}
+{% block head %}<h2>Please upload QRCode Image of TExpress</h2>{% endblock %}
+{% block metas %}<meta charset="UTF-8">{% endblock %}
+
+{% block styles %}
+<link  rel="stylesheet" type=text/css href="{{url_for('.static', filename='fileinput.css')}}" >
+
+{{super()}}
+{% endblock %}
+
+{% block body %}
+<div class="col-sm-8">
+    <input id="file-id" type="file" multiple="false" name="file">
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+<script src="http://plugins.krajee.com/assets/prod/all-krajee.js"></script>
+<script src="http://plugins.krajee.com/assets/c4d1c63b/js/fileinput.min.js"></script>
+<script src="{{url_for('.static', filename='fileinput.js')}}"></script>
+
+{{super()}}
+{% endblock %}
+
+{% endblock %}

@@ -16,7 +16,6 @@ $("#file-id").fileinput({
     browseClass: "btn btn-success",
     removeClass: "btn btn-danger",
     uploadClass: "btn btn-info",
-    uploadUrl: "http://127.0.0.1:5001/",
     layoutTemplates: {
         main1:
         "<div class=\'input-group {class}\'>\n" +
@@ -30,6 +29,23 @@ $("#file-id").fileinput({
     }
 });
 
+$("#file-id2").fileinput({
+    browseClass: "btn btn-success",
+    removeClass: "btn btn-danger",
+    uploadClass: "btn btn-info",
+    uploadUrl: "http://127.0.0.1:5001/download",
+    layoutTemplates: {
+        main1:
+        "<div class=\'input-group {class}\'>\n" +
+        "   <div class=\'input-group-btn\'>\n" +
+        "       {browse}\n" +
+        "       {upload}\n" +
+        "       {remove}\n" +
+        "   </div>\n" +
+        "   {caption}\n" +
+        "</div>\n" +  "{preview}",
+    }
+});
 $(function () {
     $("[data-toggle=\'tooltip\']").tooltip();
 });;

@@ -2,8 +2,11 @@
 # encoding: utf-8
 ###coding=utf-8
 
+# http://pythonhosted.org/Flask-Bootstrap/basic-usage.html#templates
+
 import os
 from flask import Flask, request, redirect, url_for, render_template, send_from_directory
+from flask_bootstrap import Bootstrap
 
 from werkzeug import secure_filename
 
@@ -13,9 +16,9 @@ UPLOAD_FOLDER = '/tmp/'
 ALLOWED_EXTENSIONS = set(['txt', 'png', 'jpg'])
 STATIC_URL_PATH = '/Users/sky_wu/Dropbox/work/p1-program/myprojects/TExpress' #os.path.abspath(os.path.dirname(__file__))
 
-#app = Flask(__name__)
 # set the project root directory as the static folder, you can set others.
 app = Flask(__name__, static_url_path='') #STATIC_URL_PATH) #'')
+Bootstrap(app)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -31,7 +34,7 @@ def send_file(path):
 def send_data(path):
     return send_from_directory('data', path)
 
-@app.route('/ticket', methods=['GET', 'POST'])
+@app.route('/download', methods=['GET', 'POST'])
 def get_ticket():
     pdf_link=''
     errors = []
@@ -44,12 +47,8 @@ def get_ticket():
             file.save(filename)
             pdf_file, results = tExpress.get_ticket_info(filename)
             pdf_link = pdf_file
-        #redirect(render_template('download.html', errors=errors, results=sorted(results.items()), link=pdf_link))
-        return render_template('ticket.html', errors=errors, results=sorted(results.items()), link=pdf_link)
-
-@app.route("/upload", methods=['GET', 'POST'])
-def upload_qrcode():
-    return render_template('upload.html')
+        redirect(render_template('download.html', errors=errors, results=sorted(results.items()), link=pdf_link))
+        #return render_template('download.html', errors=errors, results=sorted(results.items()), link=pdf_link)
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -67,14 +66,13 @@ def index():
                 file.save(filename)
                 pdf_file, results = tExpress.get_ticket_info(filename)
                 pdf_link = pdf_file
-            #return render_template('index.html', errors=errors, results=sorted(results.items()), link=pdf_link)
+            return render_template('download.html', errors=errors, results=sorted(results.items()), link=pdf_link)
         except:
             errors.append(
                 "Unable to get the ticket information. Please make sure it's valid and try again."
                 )
-    #else:
-    return render_template('index.html', errors=errors, results=sorted(results.items()), link=pdf_link)
-    #return render_template('index.html')
+    return render_template('flask-bootstrap.html')
+
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=5001, debug=True)

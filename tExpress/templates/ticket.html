@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TExpress Expense Application</title>
+    <div align="center"><h3> Please upload QRCode  of TExpress </h3></div>
+</head>
+<body>
+
+<div>
+    {% for error in errors %}
+    <h4>{{ error }}</h4>
+    {% endfor %}</div>
+<div class="">
+    {% if results %}
+    <div class="col-sm-8">
+        <table class="" align="left">
+            <td>
+                <h4>ticket certificate</h4></td>
+            <td><a href={{link}} target="_blank" >
+                <img src="./images/PDF.png" alt="HTML tutorial" style="width:32px;height:32px;border:0">
+            </a></td>
+        </table></div>
+    <br>
+    <div id="results" class="col-sm-8">
+        <table class="table table-striped">
+            {% for result in results %}
+            <tr>
+                <td>{{ result[0].decode('utf-8')+':' }}</td>
+                <td>{{ result[1].decode('utf-8')}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
