@@ -29,11 +29,12 @@ $("#file-id").fileinput({
     }
 });
 
-$("#file-id2").fileinput({
+$("#file-ajax").fileinput({
     browseClass: "btn btn-success",
     removeClass: "btn btn-danger",
     uploadClass: "btn btn-info",
-    uploadUrl: "http://127.0.0.1:5001/download",
+    uploadAsync: false,
+    uploadUrl: "http://127.0.0.1:5001/ajax",
     layoutTemplates: {
         main1:
         "<div class=\'input-group {class}\'>\n" +
@@ -46,6 +47,7 @@ $("#file-id2").fileinput({
         "</div>\n" +  "{preview}",
     }
 });
+
 $(function () {
     $("[data-toggle=\'tooltip\']").tooltip();
 });;
